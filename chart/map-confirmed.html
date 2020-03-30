@@ -32,9 +32,10 @@
 		var lat;
 		var long;
 
-		var topN = api.sort(function (a, b) {
+		/*var topN = api.sort(function (a, b) {
 			return a.confirmed < b.confirmed ? 1 : -1;
-		}).slice(0, 50);
+		}).slice(0, 100);*/
+		var topN = api;
 
 		for (i = 0; i < topN.length; i++) {
 			confirmed = topN[i].confirmed;
@@ -136,13 +137,14 @@
 					coordinateSystem: 'geo',
 					data: convertData(data),
 					symbolSize: function (val) {
-						return val[2] / 1000;
+						return val[2] / 500;
 					},
 					label: {
 						normal: {
 							formatter: '{b}',
 							position: 'right',
-							show: true
+							color: '#FFFFFF',
+							show: false
 						},
 						emphasis: {
 							show: true
