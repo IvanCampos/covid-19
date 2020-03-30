@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+	<meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script type="text/javascript" src="dist/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="dist/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="dist/vendors/simplex.js"></script>
+<script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    var option = null;
+
+    var PatternSrc = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACcAAACyAgMAAAC8Zj5WAAAADFBMVEU1mcQAAAA1mcQ1mcQFya0nAAAABHRSTlMZAAkRJfDlNAAAAFtJREFUOMtjCIWBEAYyAcIEkpikgDMGh3nAyIAkK1bBwAqSbPsPA39Ism03DOwgyTaEI0myDeFIWtk2NJIGfW07bwwFNvRIiIgUNZoQB33SQIBBXEaNJsQhmRABdkqh2Grn4rYAAAAASUVORK5CYII='
+    var PatternImg = new Image();
+    PatternImg.src = PatternSrc;
+
+    var fillSrc = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAF+CAMAAADz+WkdAAAAY1BMVEUAAAA00Lw92bE41LdD36lJ5aJV8JRb9Y1N6Z1R7ZhY85BZ9I8207kyz75b9o000bw51bZX8pJV8JRA3K1N6Z1Q7JlL56BT7pdC3qs717NE4Kg82LI+2rBG4aZI46RJ5aJP6pvNrsJWAAAAC3RSTlMA5+fn5+fn5+fn5wyCdZUAAAFNSURBVHja7dLrboJQEEXhkZuKqK2giNe+/1O2L9BkVtJjD+P++L1CBrYtd4ztAgT4aHHQlrSlP7PcMLYJEOCjxaPN70+nD1pt6cf/b+kTyjFoaSAeTX5/On3QaEspNAfGDgECfLRksqWRPS94QzMyJh7rkbExQLDWllJYHxk7Bgjw0TLTLX1BPFjRQDxWA2NDgAAfLTPd0gmy08AeW9E3RFDjzxogqN/xT6dXPxl7Bgjw0eJRPxh7BAjw0eJR3xm7BwgqGohHdWHsEiDAR0uSLZ2hHIOKBuJRJf9xPWTnnj38DRUNxKPoGesDBIW2lEJxY+wWIMBHi0dxZewaIMBHi0cxMTYFCPDR4lFOjH1AOQYlDcSjzO9Pa0szVXaMdQECfLRoS78EC20phcWesT0OOvYYfwPEj5ZMtpRfoC0lsdgytg0Q4KNFW9KWXugb9rK+ibjhjhMAAAAASUVORK5CYII='
+    var fillImg = new Image();
+    fillImg.src=fillSrc;
+
+	$.get('https://covid19.mathdro.id/api/countries/USA/deaths', function (api) {
+
+		/*{"provinceState":"Massachusetts","countryRegion":"US","lastUpdate":1585375556000,
+				"lat":42.48607732,"long":-71.39049229,
+				"confirmed":685,"recovered":0,"deaths":5,"active":680,"admin2":"Middlesex","fips":"25017",
+				"combinedKey":"Middlesex, Massachusetts, US","incidentRate":null,"peopleTested":null}*/
+
+		//console.log("COUNT: " + JSON.stringify(api.length));
+
+		var i;
+		var confirmed;
+		var deaths;
+		var active;
+		var data;
+		for (i = 0; i < api.length; i++) {
+			if (api[i].combinedKey == "Middlesex, Massachusetts, US") {
+				confirmed = api[i].confirmed;
+				deaths = api[i].deaths;
+				active = api[i].active;
+
+				data = [{
+					name: 'confirmed',
+					value: confirmed
+				}, {
+					name: 'active',
+					value: active
+				}, {
+					name: 'deaths',
+					value: deaths
+				}];
+
+			}
+		}
+
+		var maxData = [];
+		var maxNumArray = [];
+		data.forEach(function(value, index) {
+			maxNumArray.push(value.value);
+		});
+		data.forEach(function(value, index) {
+			var num;
+			maxData.push({
+				name: value.name,
+				value: Math.max.apply(null, maxNumArray)
+			});
+		});
+		var scale = 1;
+
+		var rich = {
+			white: {
+				color: "#fff",
+				align: 'left',
+				fontSize: 18 * scale,
+				padding: [0, 0]
+			},
+		};
+		var option = {
+			backgroundColor: '#031f2d',
+			grid: {
+				left: '3%',
+				right: '6%',
+				bottom: '3%',
+				containLabel: true
+			},
+			yAxis: [{
+				type: 'value',
+				splitLine: {
+					show: false
+				},
+				axisLine: {
+					show: false
+				},
+				axisTick: {
+					show: true,
+					inside: true,
+					length: 10 * scale,
+					lineStyle: {
+						color: '#0b5263'
+					}
+				},
+				axisLabel: {
+					textStyle: {
+						color: '#0b5263',
+						fontSize: 14 * scale
+					}
+				},
+			}],
+			xAxis: [{
+				type: 'category',
+				data: ['confirmed', 'active', 'deaths'],
+				boundaryGap: ['20%', '20%'],
+				splitLine: {
+					show: false
+				},
+				axisLine: {
+					show: false
+				},
+				axisTick: {
+					show: false
+				},
+				axisLabel: {
+					padding: [15, 0, 0, 0],
+					textStyle: {
+						fontSize: 16 * scale,
+						color: '#3fdaff'
+					}
+				}
+			}],
+			series: [{
+				name: '100',
+				type: 'bar',
+				stack: '总量',
+				z: 3,
+				barWidth: '45%',
+				data: data,
+				itemStyle: {
+					normal: {
+						color: {image: fillImg,repeat: 'repeat'}
+					}
+				}
+			}, {
+				name: 'Middlesex, MA, USA',
+				type: 'bar',
+				barWidth: '45%',
+				barGap: '-100%',
+				silent: true,
+				label: {
+					normal: {
+						show: true,
+						position: "top",
+						distance: 20 * scale,
+						formatter: function(params) {
+							var stuNum = 0;
+							data.forEach(function(value, index, array) {
+								if (params.name == value.name) {
+									stuNum = value.value;
+								}
+							})
+							return stuNum;
+						},
+						textStyle: {
+							color: "#ffc72b",
+							fontSize: 20 * scale
+						},
+						rich: rich
+					}
+				},
+				itemStyle: {
+					normal: {
+						barBorderRadius: [5, 5, 0, 0],
+						color: {image: PatternImg,repeat: 'repeat'}
+					}
+				},
+				data: maxData
+			}]
+		};
+
+		if (option && typeof option === "object") {
+			myChart.setOption(option, true);
+		}
+
+	});
+
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#000";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
+</script>
+</body>
+</html>
