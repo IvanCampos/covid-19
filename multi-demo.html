@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+	   <style>
+		   * {
+			   box-sizing: border-box;
+		   }
+		   .column33 {
+			   float: left;
+			   width: 33%;
+			   padding: 0px;
+			   height: 300px;
+		   }
+		   .column66 {
+			   float: left;
+			   width: 66%;
+			   padding: 0px;
+			   height: 300px;
+		   }
+		   .column99 {
+			   float: left;
+			   width: 99%;
+			   padding: 0px;
+			   height: 300px;
+		   }
+		   .row:after {
+			   content: "";
+			   display: table;
+			   clear: both;
+		   }
+		   .iframe {
+			   border: 0;
+			   height:100%;
+			   width:100%;
+		   }
+	   </style>
+	   <script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+   </head>
+   <body style="background-color: black;">
+   <div class="row">
+       <div id="container" class="column33">
+		   <iframe id="frame1" class="iframe" src="chart/bar-lines-vertical.html?="></iframe>
+	   </div>
+	   <div id="container2" class="column66">
+		   <iframe id="frame2" class="iframe" src="chart/horizontal-bars-colored.html?="></iframe>
+	   </div>
+   </div>
+   <div class="row">
+	   <div id="container3" class="column99">
+		   <iframe id="frame3" class="iframe" src="chart/map-deaths.html?="></iframe>
+	   </div>
+   </div>
+   <div class="row">
+	   <div id="container7" class="column33">
+		   <iframe id="frame7" class="iframe" src=""></iframe>
+	   </div>
+	   <div id="container8" class="column33">
+		   <iframe id="frame8" class="iframe" src=""></iframe>
+	   </div>
+	   <div id="container9" class="column33">
+		   <iframe id="frame9" class="iframe" src=""></iframe>
+	   </div>
+   </div>
+   <script>
+	   getColorFromQueryParam();
+       function getColorFromQueryParam() {
+           var color = "000000";
+           if (!window.location.search) return color;
+
+           let params = new URLSearchParams(window.location.search);
+
+           for (let p of params) {
+               color = p[1];
+           }
+           $("#frame1").attr('src' , $("#frame1").attr('src') + color);
+           $("#frame2").attr('src' , $("#frame2").attr('src') + color);
+           $("#frame3").attr('src' , $("#frame3").attr('src') + color);
+           $("#frame4").attr('src' , $("#frame4").attr('src') + color);
+           $("#frame5").attr('src' , $("#frame5").attr('src') + color);
+           $("#frame6").attr('src' , $("#frame6").attr('src') + color);
+           $("#frame7").attr('src' , $("#frame7").attr('src') + color);
+           $("#frame8").attr('src' , $("#frame8").attr('src') + color);
+           $("#frame9").attr('src' , $("#frame9").attr('src') + color);
+       }
+   </script>
+   </body>
+</html>
