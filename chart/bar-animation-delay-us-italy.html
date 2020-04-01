@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+	<meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script type="text/javascript" src="../dist/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="../dist/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="../dist/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="../dist/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="../dist/vendors/simplex.js"></script>
+<script type="text/javascript" src="../dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    var option = null;
+    var xAxisData = [];
+    var data1 = [];
+    var data2 = [];
+    var data3 = [];
+
+	$.get('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv', function (data) {
+		var rows = data.split('\n');
+		var result = [];
+		for (var i = 1; i < rows.length; ++i) {
+			var columns = rows[i].split(',');
+			if (columns[1] == "US") {
+				for (var j = 4; j < columns.length; ++j) {
+					xAxisData.push('Date' + j);
+					data1.push(columns[j]);
+				}
+			} else if (columns[1] == "Italy") {
+				for (var j = 4; j < columns.length; ++j) {
+					data2.push(columns[j]);
+				}
+			}
+		}
+
+		option = {
+			backgroundColor: getColorFromQueryParam(),
+			title: {
+				show: false,
+				text: 'TITLE'
+			},
+			legend: {
+				data: ['US', 'Italy'],
+				align: 'left'
+			},
+			tooltip: {},
+			xAxis: {
+				data: xAxisData,
+				silent: false,
+				splitLine: {
+					show: false
+				}
+			},
+			yAxis: {},
+			series: [{
+				name: 'US',
+				type: 'bar',
+				color: "#B22234",
+				data: data1,
+				animationDelay: function (idx) {
+					return idx * 10;
+				}
+			},{
+				name: 'Italy',
+				type: 'bar',
+				color: "#008C45",
+				data: data2,
+				animationDelay: function (idx) {
+					return idx * 10;
+				}
+			}],
+			animationEasing: 'elasticOut',
+			animationDelayUpdate: function (idx) {
+				return idx * 5;
+			}
+		};
+
+		if (option && typeof option === "object") {
+			myChart.setOption(option, true);
+		}
+
+	});
+
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#FFFFFF";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
+</script>
+</body>
+</html>
