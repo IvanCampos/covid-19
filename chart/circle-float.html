@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+	<meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script type="text/javascript" src="../dist/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="../dist/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="../dist/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="../dist/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="../dist/vendors/simplex.js"></script>
+<script type="text/javascript" src="../dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    var option = null;
+
+	/*myChart.on('click', function(params) {
+		console.log(params.name);
+		window.open(params.data.url);
+	});*/
+
+	var colorList = [[
+		'#ff7f50', '#87cefa', '#da70d6', '#32cd32', '#6495ed',
+		'#ff69b4', '#ba55d3', '#cd5c5c', '#ffa500', '#40e0d0',
+		'#1e90ff', '#ff6347', '#7b68ee', '#d0648a', '#ffd700',
+		'#6b8e23', '#4ea397', '#3cb371', '#b8860b', '#7bd9a5'
+	],
+	[
+		'#ff7f50', '#87cefa', '#da70d6', '#32cd32', '#6495ed',
+		'#ff69b4', '#ba55d3', '#cd5c5c', '#ffa500', '#40e0d0',
+		'#1e90ff', '#ff6347', '#7b68ee', '#00fa9a', '#ffd700',
+		'#6b8e23', '#ff00ff', '#3cb371', '#b8860b', '#30e0e0'
+	],
+	[
+		'#929fff', '#9de0ff', '#ffa897', '#af87fe', '#7dc3fe',
+		'#bb60b2', '#433e7c', '#f47a75', '#009db2', '#024b51',
+		'#0780cf', '#765005', '#e75840', '#26ccd8', '#3685fe',
+		'#9977ef', '#f5616f', '#f7b13f', '#f9e264', '#50c48f'
+	]][2];
+
+
+	/*var circleData = [];
+	circleData.push({
+		"name": "疫情中的逆行者",
+		"value": 92000,
+		"symbolSize": 123,
+		"draggable": true,
+		"itemStyle": {
+			"normal": {
+				"shadowBlur": 100,
+				"shadowColor": colorList[18],
+				"color": colorList[18]
+			}
+		}
+	});*/
+
+	$.get('https://covid-19-api-ja2mrq0w1.now.sh/api/deaths', function (api) {
+
+		var i;
+		var confirmed;
+		var deaths;
+		var combinedKey;
+		var circleData = [];
+
+		var top20 = api.sort(function (a, b) {
+			return a.confirmed < b.confirmed ? 1 : -1;
+		}).slice(0, 20);
+
+		for (i = 0; i < top20.length; i++) {
+			console.log("HELLO " + i);
+			confirmed = top20[i].confirmed;
+			deaths = top20[i].deaths;
+			combinedKey = top20[i].combinedKey;
+			circleData.push({
+				"name": combinedKey,
+				"value": confirmed,
+				"symbolSize": confirmed/750,
+				"draggable": true,
+				"itemStyle": {
+					"normal": {
+						"shadowBlur": 100,
+						"shadowColor": colorList[i],
+						"color": colorList[i]
+					}
+				}
+			});
+		}
+
+		option = {
+			title: {
+				show: false,
+				text: 'TITLE',
+				x: 'center',
+				y: 'bottom',
+				backgroundColor: 'rgba(0,0,0,0)',
+				borderColor: '#ccc',
+				borderWidth: 0,
+				padding: 5,
+
+				itemGap: 10,
+				textStyle: {
+					fontSize: 18,
+					fontWeight: 'bolder',
+					color: '#333'
+				},
+				subtextStyle: {
+					color: '#aaa'
+				}
+			},
+			backgroundColor: '#000000',
+			tooltip: {},
+			animationDurationUpdate: function (idx) {
+				return idx * 100;
+			},
+			animationEasingUpdate: 'bounceIn',
+			color: ['#fff', '#fff', '#fff'],
+			series: [{
+				type: 'graph',
+				layout: 'force',
+				force: {
+					repulsion: 500,
+					edgeLength: 10
+				},
+				roam: true,
+				label: {
+					normal: {
+						show: true
+					}
+				},
+				data: circleData,
+				zoom: 0.75
+			}]
+		}
+
+
+	if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+
+	});
+
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#000000";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
+</script>
+</body>
+</html>
