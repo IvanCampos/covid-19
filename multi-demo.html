@@ -16,7 +16,7 @@
 			   float: left;
 			   width: 50%;
 			   padding: 0px;
-			   height: 400px;
+			   height: 300px;
 		   }
 		   .column50h {
 			   float: left;
@@ -46,10 +46,25 @@
 			   height:100%;
 			   width:100%;
 		   }
+		   .header {
+			   height: 50px;
+			   padding-bottom: 0px;
+			   width: 100%;
+			   border: 0;
+		   }
+		   .footer {
+			   height: 50px;
+			   padding-bottom: 0px;
+			   width: 100%;
+			   border: 0;
+		   }
 	   </style>
 	   <script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
    </head>
    <body style="background-color: black;">
+   <div class="row">
+	   <iframe id="header" class="header" src="header-title.html"></iframe>
+   </div>
    <div class="row">
        <div id="container" class="column50">
 		   <iframe id="frame1" class="iframe" src="chart/bar-lines-vertical-local.html?="></iframe>
@@ -81,6 +96,9 @@
 	   <div id="container8" class="column50h">
 		   <iframe id="frame8" class="iframe" src="chart/map-lines-bars.html?="></iframe>
 	   </div>
+   </div>
+   <div class="row">
+	   <iframe id="footer" class="footer" src="footer-time.html"></iframe>
    </div>
    <script>
 	   getColorFromQueryParam();

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Footer</title>
+    <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
+    <style>
+        body {
+            background-color: black;
+            font-family: 'Orbitron', sans-serif;
+            color: darkgray;
+        }
+        .footer-dateTime {
+            grid-area: footer-dateTime;
+            background-color: black;
+        }
+        .pale-glass {
+            opacity: 0.25;
+            z-index: 2;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="footer-dateTime pale-glass" align="center" style="padding-top: 17px; color: white;">
+    <div id="time" style="color:darkgray;"></div>
+</div>
+
+<script>
+    setInterval(function () {
+        var now = new Date();
+        document.getElementById("time").innerHTML = prependZero(now.getMonth()+1)+"."+prependZero(now.getDate())+"."+now.getFullYear()+"\n"
+            +prependZero(now.getHours())+":"+prependZero(now.getMinutes())+":"+prependZero(now.getSeconds());
+    }, 1000);
+
+    function prependZero(number){
+        return number < 10? '0'+number:''+number;
+    }
+</script>
+
+</body>
+</html>
