@@ -22,7 +22,6 @@
     var data = [];
 	var geoCoordMap = {};
 
-
 	$.get('https://covid-19-api-ja2mrq0w1.now.sh/api/countries/USA/deaths', function (api) {
 
 		var i;
@@ -52,7 +51,7 @@
 			var res = [];
 			for (var i = 0; i < data.length; i++) {
 				var geoCoord = geoCoordMap[data[i].name];
-				console.log("geo: " + geoCoord);
+				//console.log("geo: " + geoCoord);
 				if (geoCoord) {
 					res.push({
 						name: data[i].name,

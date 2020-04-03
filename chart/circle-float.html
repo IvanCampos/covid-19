@@ -16,11 +16,6 @@
     var myChart = echarts.init(dom);
     var option = null;
 
-	/*myChart.on('click', function(params) {
-		console.log(params.name);
-		window.open(params.data.url);
-	});*/
-
 	var colorList = [[
 		'#ff7f50', '#87cefa', '#da70d6', '#32cd32', '#6495ed',
 		'#ff69b4', '#ba55d3', '#cd5c5c', '#ffa500', '#40e0d0',
@@ -40,22 +35,6 @@
 		'#9977ef', '#f5616f', '#f7b13f', '#f9e264', '#50c48f'
 	]][2];
 
-
-	/*var circleData = [];
-	circleData.push({
-		"name": "疫情中的逆行者",
-		"value": 92000,
-		"symbolSize": 123,
-		"draggable": true,
-		"itemStyle": {
-			"normal": {
-				"shadowBlur": 100,
-				"shadowColor": colorList[18],
-				"color": colorList[18]
-			}
-		}
-	});*/
-
 	$.get('https://covid-19-api-ja2mrq0w1.now.sh/api/deaths', function (api) {
 
 		var i;
@@ -69,7 +48,6 @@
 		}).slice(0, 20);
 
 		for (i = 0; i < top20.length; i++) {
-			console.log("HELLO " + i);
 			confirmed = top20[i].confirmed;
 			deaths = top20[i].deaths;
 			combinedKey = top20[i].combinedKey;
