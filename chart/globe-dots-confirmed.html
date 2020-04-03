@@ -137,7 +137,7 @@
 			img.dirty();
 		};
 
-		$.get('https://covid-19-api-ja2mrq0w1.now.sh/api/deaths', function (api) {
+		$.get('https://covid-19-api-ja2mrq0w1.now.sh/api/confirmed', function (api) {
 			var dotData = [];
 			for (var i = 0; i < api.length; i++) {
 				var currentCountry = api[i];

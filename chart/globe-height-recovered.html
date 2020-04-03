@@ -19,14 +19,14 @@
     var myChart = echarts.init(dom);
     var option = null;
 
-	var confirmed_url = "https://covid-19-api-ja2mrq0w1.now.sh/api/confirmed";
+	var confirmed_url = "https://covid-19-api-ja2mrq0w1.now.sh/api/deaths";
 	var data = {};
 
 	$.getJSON(confirmed_url, function (data) {
 		data = data.filter(function (dataItem) {
-			return dataItem.confirmed > 0;
+			return dataItem.recovered > 0;
 		}).map(function (dataItem) {
-			return [dataItem.long, dataItem.lat, dataItem.confirmed];
+			return [dataItem.long, dataItem.lat, dataItem.recovered];
 		});
 
 		let canvas = document.createElement('canvas');
@@ -54,7 +54,7 @@
 				displacementScale: 0.04,
 				displacementQuality: 'high',
 				globeOuterRadius: 120,
-				baseColor: '#8B0000',
+				//baseColor: '#FFFFFF',
 				shading: 'realistic',
 				//environment: 'asset/get/s/data-1491837999815-H1_44Qtal.jpg',
 				realisticMaterial: {
@@ -95,7 +95,7 @@
 				blendMode: 'lighter',
 				symbolSize: 2,
 				itemStyle: {
-					color: 'rgb(255,0,0)',
+					color: 'rgb(0,255,0)',
 					opacity: 1
 				},
 				data: data

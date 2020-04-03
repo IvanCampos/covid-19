@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+	<meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script type="text/javascript" src="../dist/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="../dist/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="../dist/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="../dist/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="../dist/vendors/echarts/map/js/china.js"></script>
+<script type="text/javascript" src="../dist/vendors/echarts/map/js/world.js"></script>
+<script type="text/javascript" src="../dist/vendors/echarts/extension/bmap.min.js"></script>
+<script type="text/javascript" src="../dist/vendors/simplex.js"></script>
+<script type="text/javascript" src="../dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    var option = null;
+
+	var confirmed_url = "https://covid-19-api-ja2mrq0w1.now.sh/api/deaths";
+	var data = {};
+
+	$.getJSON(confirmed_url, function (data) {
+		data = data.filter(function (dataItem) {
+			return dataItem.deaths > 0;
+		}).map(function (dataItem) {
+			return [dataItem.long, dataItem.lat, dataItem.deaths];
+		});
+
+		let canvas = document.createElement('canvas');
+		let mapChart = echarts.init(canvas, null, {
+			width: 4096,
+			height: 2048
+		});
+
+		option = {
+			backgroundColor: '#000000',
+			visualMap: {
+				show: false,
+				min: 0,
+				max: 60,
+				type: 'continuous',
+				seriesIndex: 0,
+				inRange: {
+					symbolSize: [1.0, 10.0]
+				}
+			},
+			globe: {
+				baseTexture: "../asset/get/s/data-1565167424629-_VRUzTZn2.jpg",
+				heightTexture: '../asset/get/s/data-1491889019097-rJQYikcpl.jpg',
+				// heightTexture: '/asset/get/s/data-1573130275525-nUJPfdWG.jpg',
+				displacementScale: 0.04,
+				displacementQuality: 'high',
+				globeOuterRadius: 120,
+				baseColor: '#8B0000',
+				shading: 'realistic',
+				//environment: 'asset/get/s/data-1491837999815-H1_44Qtal.jpg',
+				realisticMaterial: {
+					roughness: 0.9
+				},
+				postEffect: {
+					enable: true
+				},
+				temporalSuperSampling: {
+					enable: true
+				},
+				light: {
+					main: {
+						color: '#fff',
+						intensity: 1.2,
+						shadow: false
+					}
+				},
+				viewControl: {
+					projection: 'perspective',
+					alpha: 90,
+					beta: 0,
+					center: [0, 0, 0],
+					targetCoord: [120, 38],
+					autoRotate: true,
+					autoRotateAfterStill: 4,
+					distance: 200,
+					autoRotateSpeed: 4
+				},
+				layers: [{
+					type: 'blend',
+					texture: mapChart
+				}]
+			},
+			series: {
+				type: 'scatter3D',
+				coordinateSystem: 'globe',
+				blendMode: 'lighter',
+				symbolSize: 2,
+				itemStyle: {
+					color: 'rgb(255,0,0)',
+					opacity: 1
+				},
+				data: data
+			}
+		}
+
+		myChart.setOption(option);
+	});
+
+
+	if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    $(window).on('resize', function () {
+        if (myChart != null && myChart != undefined) {
+            myChart.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#000000";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
+</script>
+</body>
+</html>
