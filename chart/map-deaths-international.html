@@ -20,6 +20,7 @@
     var option = null;
 
     var data = [];
+    var redData = [];
 	var geoCoordMap = {};
 
 
@@ -43,7 +44,11 @@
 			combinedKey = topN[i].combinedKey;
 			lat = topN[i].lat;
 			long = topN[i].long;
-			data.push({name: combinedKey, value: deaths});
+			if (deaths > 1000) {
+				redData.push({name: combinedKey, value: deaths});
+			} else {
+				data.push({name: combinedKey, value: deaths});
+			}
 			var coordinates = [long, lat];
 			geoCoordMap[combinedKey] = coordinates;
 		}
@@ -136,9 +141,9 @@
 					name: 'epiCenters',
 					type: 'effectScatter',
 					coordinateSystem: 'geo',
-					data: convertData(data),
+					data: convertData(redData),
 					symbolSize: function (val) {
-						return val[2]/125;
+						return val[2]/180;
 					},
 					label: {
 						normal: {
@@ -154,6 +159,30 @@
 					itemStyle: {
 						normal: {
 							color: '#FF0000'
+						}
+					}
+				}, {
+					name: 'epiCenters',
+					type: 'effectScatter',
+					coordinateSystem: 'geo',
+					data: convertData(data),
+					symbolSize: function (val) {
+						return val[2]/25;
+					},
+					label: {
+						normal: {
+							formatter: '{b}',
+							position: 'right',
+							color: '#FFFFFF',
+							show: false
+						},
+						emphasis: {
+							show: true
+						}
+					},
+					itemStyle: {
+						normal: {
+							color: '#FF00FF'
 						}
 					}
 				}
