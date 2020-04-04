@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Middlesex, Massachusetts, US Totals</title>
+    <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
+    <script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+    <style>
+        body {
+            background-color: black;
+            font-family: 'Orbitron', sans-serif;
+            color: #212121;
+            font-size: 28px;
+            text-align: left;
+        }
+        .pipe {
+            color: black;
+        }
+        .number {
+            color: darkred;
+        }
+    </style>
+</head>
+<body>
+MIDDLESEX, MA<b>:</b> <span id="confirmed" class="number"></span> CONFIRMED <span class="pipe">|</span> <span id="active" class="number"></span> ACTIVE <span class="pipe">|</span> <span id="deaths" class="number"></span> DEATHS
+<script>
+    $.get('https://covid-19-api-ja2mrq0w1.now.sh/api/countries/USA/deaths', function (api) {
+        var i;
+        var confirmed;
+        var deaths;
+        var active;
+        var data;
+        for (i = 0; i < api.length; i++) {
+            if (api[i].combinedKey == "Middlesex, Massachusetts, US") {
+                confirmed = api[i].confirmed;
+                deaths = api[i].deaths;
+                active = api[i].active;
+                data = [{
+                    name: 'confirmed',
+                    value: confirmed
+                }, {
+                    name: 'active',
+                    value: active
+                }, {
+                    name: 'deaths',
+                    value: deaths
+                }];
+            }
+        }
+        document.getElementById("confirmed").innerText = numberWithCommas(confirmed);
+        document.getElementById("active").innerText = numberWithCommas(active);
+        document.getElementById("deaths").innerText = numberWithCommas(deaths);
+    });
+
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+    }
+</script>
+</body>
+</html>
