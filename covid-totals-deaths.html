@@ -12,9 +12,9 @@
             color: whitesmoke;
             font-size: 36px;
         }
-        .column33 {
+        .column99 {
             float: left;
-            width: 33%;
+            width: 99%;
             padding: 0px;
             height: 50px;
             text-align: center;
@@ -28,19 +28,13 @@
 </head>
 <body>
 <div class="row">
-    <div id="confirmed" class="column33"></div>
-    <div id="recovered" class="column33"></div>
-    <div id="deaths" class="column33"></div>
+    <div id="deaths" class="column99"></div>
 </div>
 <div class="row">
-    <div id="confirmed2" class="column33 subtext">CONFIRMED</div>
-    <div id="recovered2" class="column33 subtext">RECOVERED</div>
-    <div id="deaths2" class="column33 subtext">DEATHS</div>
+    <div id="deaths2" class="column99 subtext">DEATHS</div>
 </div>
 <script type="text/javascript">
     $.get('https://covid-19-api-ja2mrq0w1.now.sh/api/', function (api) {
-        document.getElementById("confirmed").innerText=numberWithCommas(api.confirmed.value);
-        document.getElementById("recovered").innerText=numberWithCommas(api.recovered.value);
         document.getElementById("deaths").innerText=numberWithCommas(api.deaths.value);
     });
 

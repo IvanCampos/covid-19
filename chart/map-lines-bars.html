@@ -74,6 +74,9 @@
 			animationEasing: 'cubicInOut',
 			animationDurationUpdate: 1000,
 			animationEasingUpdate: 'cubicInOut',
+			toolbox: {
+				show: false
+			},
 			title: [
 				{
 					text: 'World Map',
@@ -97,7 +100,7 @@
 			],
 			brush: {
 				outOfBrush: {
-					color: '#abc'
+					color: '#FF0000'
 				},
 				brushStyle: {
 					borderWidth: 2,
@@ -112,10 +115,8 @@
 			geo: {
 				type: 'map',
 				map: 'world',
-				left: '100',
-				right: '0%',
-				center: [117.98561551896913, 31.205000490896193],
-				zoom: 0.75,
+				center: [22.9375, 32.5595],
+				zoom: 2.0,
 				label: {
 					emphasis: {
 						show: false
