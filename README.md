@@ -1,6 +1,8 @@
 # COVID-19
 COVID-19 Dashboard
 
+![COVID-19 Dashboard](screenshot/covid-19-ivancampos-2020-4-05.png)
+
 Built on the shoulders of these giants: 
 * HTML, CSS, and JavaScript
 * eCharts: https://echarts.apache.org/en/index.html
