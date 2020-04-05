@@ -10,6 +10,10 @@
             border: none;
             border-width: 0px;
         }
+        .toggle {
+            z-index: 999;
+            background-color: #030303;
+        }
     </style>
 </head>
 <body style="background-color: black; border: none;">
@@ -17,36 +21,54 @@
 <div class="container-fluid">
     <div class="row">
         <iframe id="header1" class="col-lg-10" style="height:5vh;padding-bottom: 1px;" src="text/header-totals.html"></iframe>
-        <iframe id="header3" class="col-lg-2" style="height:5vh;padding-bottom: 1px;" src="text/header-title.html"></iframe>
+        <iframe id="header2" class="col-lg-2" style="height:5vh;padding-bottom: 1px;" src="text/header-title.html"></iframe>
     </div>
     <div class="row">
         <div class="col-lg-3">
             <iframe id="totals1" class="col-lg-12" style="height:8vh;" src="text/covid-totals-confirmed.html"></iframe>
-            <iframe id="frame6" class="col-lg-12" style="height:15vh;" src="chart/globe-dots-confirmed.html?="></iframe>
+            <div id="toggle1" class="toggle">
+                <iframe id="frame1" class="col-lg-12" style="height:15vh;" src="chart/globe-dots-confirmed.html?=" allowfullscreen></iframe>
+            </div>
 
             <iframe id="totals2" class="col-lg-12" style="height:8vh;" src="text/covid-totals-recovered.html"></iframe>
-            <iframe id="frame10" class="col-lg-12" style="height:15vh;" src="chart/globe-height-recovered.html?="></iframe>
+            <div id="toggle2" class="toggle">
+                <iframe id="frame2" class="col-lg-12" style="height:15vh;" src="chart/globe-height-recovered.html?=" allowfullscreen></iframe>
+            </div>
 
             <iframe id="totals3" class="col-lg-12" style="height:8vh;" src="text/covid-totals-deaths.html"></iframe>
-            <iframe id="frame2" class="col-lg-12" style="height:15vh;" src="chart/globe-height-deaths.html?="></iframe>
+            <div id="toggle3" class="toggle">
+                <iframe id="frame3" class="col-lg-12" style="height:15vh;" src="chart/globe-height-deaths.html?=" allowfullscreen></iframe>
+            </div>
 
-            <iframe id="frame5" class="col-lg-12" style="height:20vh;" src="chart/map-heatmap-international.html?="></iframe>
+            <div id="toggle4" class="toggle">
+                <iframe id="frame4" class="col-lg-12" style="height:20vh;" src="chart/map-heatmap-international.html?=" allowfullscreen></iframe>
+            </div>
         </div>
         <div class="col-lg-5">
-            <iframe id="frame3" class="col-lg-12" style="height:50vh;" src="chart/map-deaths-international.html?="></iframe>
+            <div id="toggle5" class="toggle">
+                <iframe id="frame5" class="col-lg-12" style="height:50vh;" src="chart/map-deaths-international.html?=" allowfullscreen></iframe>
+            </div>
 
-            <iframe id="frame11" class="col-lg-12" style="height:45vh;" src="chart/map-epicenter-boston.html?="></iframe>
+            <div id="toggle6" class="toggle">
+                <iframe id="frame6" class="col-lg-12" style="height:45vh;" src="chart/map-epicenter-boston.html?=" allowfullscreen></iframe>
+            </div>
         </div>
         <div class="col-lg-4">
-            <iframe id="frame7" class="col-lg-12" style="height:30vh;" src="chart/map-lines-bars.html?="></iframe>
+            <div id="toggle7" class="toggle">
+                <iframe id="frame7" class="col-lg-12" style="height:30vh;" src="chart/map-lines-bars.html?=" allowfullscreen></iframe>
+            </div>
 
-            <iframe id="frame4" class="col-lg-12" style="height:35vh;" src="chart/horizontal-bars-colored-domestic.html?="></iframe>
+            <div id="toggle8" class="toggle">
+                <iframe id="frame8" class="col-lg-12" style="height:35vh;" src="chart/horizontal-bars-colored-domestic.html?=" allowfullscreen></iframe>
+            </div>
 
-            <iframe id="frame15" class="col-lg-12" style="height:30vh;" src="chart/map-confirmed-domestic.html?="></iframe>
+            <div id="toggle9" class="toggle">
+                <iframe id="frame9" class="col-lg-12" style="height:30vh;" src="chart/map-confirmed-domestic.html?=" allowfullscreen></iframe>
+            </div>
         </div>
     </div>
     <div class="row">
-        <iframe id="footer" class="col-lg-12 col-md-12 col-sm-12" style="height:5vh;" src="text/footer-time.html"></iframe>
+        <iframe id="footer1" class="col-lg-12 col-md-12 col-sm-12" style="height:5vh;" src="text/footer-time.html"></iframe>
     </div>
 </div>
 
@@ -73,12 +95,80 @@
         $("#frame7").attr('src' , $("#frame7").attr('src') + color);
         $("#frame8").attr('src' , $("#frame8").attr('src') + color);
         $("#frame9").attr('src' , $("#frame9").attr('src') + color);
-        $("#frame10").attr('src' , $("#frame10").attr('src') + color);
-        $("#frame11").attr('src' , $("#frame11").attr('src') + color);
-        $("#frame12").attr('src' , $("#frame12").attr('src') + color);
-        $("#frame13").attr('src' , $("#frame13").attr('src') + color);
-        $("#frame14").attr('src' , $("#frame14").attr('src') + color);
-        $("#frame15").attr('src' , $("#frame15").attr('src') + color);
+    }
+    if (document.fullscreenEnabled) {
+        document.getElementById("toggle1").addEventListener("click", function (event) {
+            if (!document.fullscreenElement) {
+                document.getElementById("frame1").requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+
+        }, false);
+        document.getElementById("toggle2").addEventListener("click", function (event) {
+            if (!document.fullscreenElement) {
+                document.getElementById("frame2").requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+
+        }, false);
+        document.getElementById("toggle3").addEventListener("click", function (event) {
+            if (!document.fullscreenElement) {
+                document.getElementById("frame3").requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+
+        }, false);
+        document.getElementById("toggle4").addEventListener("click", function (event) {
+            if (!document.fullscreenElement) {
+                document.getElementById("frame4").requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+
+        }, false);
+        document.getElementById("toggle5").addEventListener("click", function (event) {
+            if (!document.fullscreenElement) {
+                document.getElementById("frame5").requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+
+        }, false);
+        document.getElementById("toggle6").addEventListener("click", function (event) {
+            if (!document.fullscreenElement) {
+                document.getElementById("frame6").requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+
+        }, false);
+        document.getElementById("toggle7").addEventListener("click", function (event) {
+            if (!document.fullscreenElement) {
+                document.getElementById("frame7").requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+
+        }, false);
+        document.getElementById("toggle8").addEventListener("click", function (event) {
+            if (!document.fullscreenElement) {
+                document.getElementById("frame8").requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+
+        }, false);
+        document.getElementById("toggle9").addEventListener("click", function (event) {
+            if (!document.fullscreenElement) {
+                document.getElementById("frame9").requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+
+        }, false);
     }
 </script>
 </body>
