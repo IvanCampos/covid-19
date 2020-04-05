@@ -22,7 +22,7 @@
     </style>
 </head>
 <body>
-MIDDLESEX, MA<b>:</b> <span id="confirmed" class="number"></span> CONFIRMED <span class="pipe">|</span> <span id="active" class="number"></span> ACTIVE <span class="pipe">|</span> <span id="deaths" class="number"></span> DEATHS
+MIDDLESEX, MASSACHUSETTS<b>:</b> <span id="confirmed" class="number"></span> CONFIRMED <span class="pipe">|</span> <span id="deaths" class="number"></span> DEATHS
 <script>
     $.get('https://covid-19-api-ja2mrq0w1.now.sh/api/countries/USA/deaths', function (api) {
         var i;
@@ -39,16 +39,12 @@ MIDDLESEX, MA<b>:</b> <span id="confirmed" class="number"></span> CONFIRMED <spa
                     name: 'confirmed',
                     value: confirmed
                 }, {
-                    name: 'active',
-                    value: active
-                }, {
                     name: 'deaths',
                     value: deaths
                 }];
             }
         }
         document.getElementById("confirmed").innerText = numberWithCommas(confirmed);
-        document.getElementById("active").innerText = numberWithCommas(active);
         document.getElementById("deaths").innerText = numberWithCommas(deaths);
     });
 
