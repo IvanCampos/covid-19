@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Totals</title>
     <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
-    <script type="text/javascript" src="dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="../dist/vendors/jquery/jquery-3.1.1.min.js"></script>
     <style>
         body {
             background-color: black;
@@ -28,14 +28,14 @@
 </head>
 <body>
 <div class="row">
-    <div id="deaths" class="column99"></div>
+    <div id="confirmed" class="column99"></div>
 </div>
 <div class="row">
-    <div id="deaths2" class="column99 subtext">DEATHS</div>
+    <div id="confirmed2" class="column99 subtext">CONFIRMED</div>
 </div>
 <script type="text/javascript">
     $.get('https://covid-19-api-ja2mrq0w1.now.sh/api/', function (api) {
-        document.getElementById("deaths").innerText=numberWithCommas(api.deaths.value);
+        document.getElementById("confirmed").innerText=numberWithCommas(api.confirmed.value);
     });
 
     function numberWithCommas(x) {
