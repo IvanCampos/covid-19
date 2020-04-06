@@ -27,7 +27,7 @@
 		var i;
 		var confirmed;
 		var deaths;
-		var combinedKey;
+		var county;
 		var lat;
 		var long;
 
@@ -40,12 +40,12 @@
 			if (topN[i].provinceState == "Massachusetts") {
 				confirmed = topN[i].confirmed;
 				deaths = topN[i].deaths;
-				combinedKey = topN[i].combinedKey;
+				county = topN[i].admin2;
 				lat = topN[i].lat;
 				long = topN[i].long;
-				data.push({name: combinedKey, value: confirmed});
+				data.push({name: county, value: confirmed});
 				var coordinates = [long, lat];
-				geoCoordMap[combinedKey] = coordinates;
+				geoCoordMap[county] = coordinates;
 			}
 		}
 
@@ -54,9 +54,6 @@
 		$.getJSON(uploadedDataURL, function (geoJson) {
 			echarts.registerMap('MA', geoJson);
 			myChart.hideLoading();
-			console.log("DATA: " + JSON.stringify(data));
-			var max = 480, min = 9; // todo
-			var maxSize4Pin = 100, minSize4Pin = 20;
 
 			var convertData = function (data) {
 				var res = [];
@@ -96,7 +93,7 @@
 				visualMap: {
 					show: false,
 					min: 0,
-					max: 500,
+					max: 400,
 					left: 'left',
 					top: 'bottom',
 					calculable: true,
@@ -107,9 +104,9 @@
 				},
 				geo: {
 					show: true,
-					top: 180,
-					right: 30,
-					zoom: 1.50,
+					top: 175,
+					right: 10,
+					zoom: 1.75,
 					map: 'MA',
 					label: {
 						normal: {
@@ -138,7 +135,6 @@
 						type: 'map',
 						map: 'MA',
 						geoIndex: 0,
-						aspectScale: 0.65,
 						showLegendSymbol: false,
 						label: {
 							normal: {
