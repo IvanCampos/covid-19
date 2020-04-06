@@ -71,15 +71,6 @@
 
 			option = {
 				backgroundColor: getColorFromQueryParam(),
-				title: {
-					text: 'COVID-19 Boston',
-					subtext: '',
-					x: 'center',
-					textStyle: {
-						color: '#ccc'
-					},
-					show: false
-				},
 				tooltip: {
 					trigger: 'item',
 					formatter: function (params) {
@@ -90,27 +81,15 @@
 						}
 					}
 				},
-				visualMap: {
-					show: false,
-					min: 0,
-					max: 400,
-					left: 'left',
-					top: 'bottom',
-					calculable: true,
-					seriesIndex: [1],
-					inRange: {
-						color: ['#0000FF', '#FFFFFF', '#FFFFFF']
-					}
-				},
 				geo: {
 					show: true,
-					top: 170,
-					right: 10,
-					zoom: 1.75,
+					top: 10,
+					right: 0,
+					zoom: 1.0,
 					map: 'MA',
 					label: {
 						normal: {
-							show: false
+							show: true
 						},
 						emphasis: {
 							show: false,
@@ -168,7 +147,7 @@
 							return b.value - a.value;
 						})),
 						symbolSize: function (val) {
-							return val[2] / 80;
+							return val[2] / 100;
 						},
 						showEffectOn: 'render',
 						rippleEffect: {
