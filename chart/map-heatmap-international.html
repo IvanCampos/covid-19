@@ -51,11 +51,10 @@
 			var res = [];
 			for (var i = 0; i < data.length; i++) {
 				var geoCoord = geoCoordMap[data[i].name];
-				//console.log("geo: " + geoCoord);
 				if (geoCoord) {
 					res.push({
 						name: data[i].name,
-						value: geoCoord.concat(data[i].value)
+						value: geoCoord.concat(data[i].value/2)
 					});
 				}
 			}
@@ -148,7 +147,7 @@
 					coordinateSystem: 'geo',
 					data: convertData(data),
 					symbolSize: function (val) {
-						return val[2]/20;
+						return val[2]/40;
 					},
 					label: {
 						normal: {
