@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Totals</title>
+    <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
+    <script type="text/javascript" src="../dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+    <style>
+        body {
+            background-color: white;
+            font-family: 'Orbitron', sans-serif;
+            color: black;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<div id="test"></div>
+<script type="text/javascript">
+
+    var params = {
+        origin: '*',
+        action: 'parse',
+        page: '2020_coronavirus_pandemic_in_Massachusetts#cite_note-MDPH-Cases-1',
+        prop: 'text',
+        format: 'json'
+    };
+
+    $.getJSON('https://en.wikipedia.org/w/api.php', params).then(response => {
+        var tables = $(response.parse.text['*']).find('table');
+
+        /*var totalCasesTable = tables[5];
+        console.log("total: " + totalCasesTable.rows.length);
+        for (var i=0; i<totalCasesTable.rows.length; i++) {
+            var currentRow = totalCasesTable.rows[i];
+            console.log("row[" + i + "]");
+            for (var j=0; j<currentRow.cells.length; j++) {
+                var currentCell = currentRow.cells[j];
+                console.log("cell{" + j + "]: " + currentRow.cells[j].innerText);
+            }
+        }
+        $('body').append(totalCasesTable);*/
+
+        //$('body').append('<hr/>');
+
+        var casesByCountyTable = tables[6];
+        //console.log("total: " + casesByCountyTable.rows.length);
+        for (var i=2; i<casesByCountyTable.rows.length-2; i++) {
+            var currentRow = casesByCountyTable.rows[i];
+            console.log("row[" + i + "]");
+            for (var j=0; j<currentRow.cells.length; j++) {
+                var currentCell = currentRow.cells[j];
+                var date,barnstable,berkshire,bristol,dukesAndNantucket,essex,franklin,hampden,hampshire,middlesex,norfolk,plymouth,suffolk,worcester;
+                switch (j) {
+                    case 0:
+                        date = currentCell.innerText;
+                        //console.log("DATE: " + date);
+                        break;
+                    case 1:
+                        barnstable = currentCell.innerText;
+                        //console.log("BARNSTABLE: "+ barnstable);
+                        break;
+                    case 2:
+                        berkshire = currentCell.innerText;
+                        //console.log("BERKSHIRE: "+ berkshire);
+                        break;
+                    case 3:
+                        bristol = currentCell.innerText;
+                        //console.log("BRISTOL: "+ bristol);
+                        break;
+                    case 4:
+                        dukesAndNantucket = currentCell.innerText;
+                        //console.log("DUKES AND NANTUCKET: "+ dukesAndNantucket);
+                        break;
+                    case 5:
+                        essex = currentCell.innerText;
+                        //console.log("ESSEX: "+ essex);
+                        break;
+                    case 7:
+                        franklin = currentCell.innerText;
+                        //console.log("FRANKLIN: "+ franklin);
+                        break;
+                    case 8:
+                        hampden = currentCell.innerText;
+                        //console.log("HAMPDEN: "+ hampden);
+                        break;
+                    case 9:
+                        hampshire = currentCell.innerText;
+                        //console.log("HAMPSHIRE: "+ hampshire);
+                        break;
+                    case 10:
+                        middlesex = currentCell.innerText;
+                        //console.log("MIDDLESEX: "+ middlesex);
+                        break;
+                    case 11:
+                        norfolk = currentCell.innerText;
+                        //console.log("NORFOLK: "+ norfolk);
+                        break;
+                    case 12:
+                        plymouth = currentCell.innerText;
+                        //console.log("PLYMOUTH: "+ plymouth);
+                        break;
+                    case 13:
+                        suffolk = currentCell.innerText;
+                        //console.log("SUFFOLK: "+ suffolk);
+                        break;
+                    case 14:
+                        worcester = currentCell.innerText;
+                        //console.log("WORCESTER: "+ worcester);
+                        break;
+                }
+                //console.log("cell{" + j + "]: " + currentCell.innerText);
+            }
+        }
+        $('body').append(casesByCountyTable);
+    });
+
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+    }
+</script>
+</body>
+</html>
