@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Middlesex, Massachusetts, US Totals</title>
     <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
-    <script type="text/javascript" src="../dist/vendors/jquery/jquery-3.1.1.min.js"></script>
     <style>
         body {
             background-color: black;
@@ -23,6 +22,7 @@
 </head>
 <body>
 MIDDLESEX<b>:</b> <span id="confirmed" class="number"></span> CONFIRMED <span class="pipe">|</span> <span id="deaths" class="number"></span> DEATHS
+<script type="text/javascript" src="../dist/vendors/jquery/jquery-3.1.1.min.js"></script>
 <script>
     $.get('https://covid-19-api-ja2mrq0w1.now.sh/api/countries/USA/deaths', function (api) {
         var i;
