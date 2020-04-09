@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+    <meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script type="text/javascript" src="../dist/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="../dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    var option = null;
+
+    var xAxisData = [], barnstableData = [], berksireData = [], bristolData = [], dukesAndNantucketData = [], essexData = [], franklinData = [],
+        hampdenData = [], hampshireData = [], middlesexData = [], norfolkData = [], plymouthData = [], suffolkData = [], worcesterData = [];
+
+    var counties = ['Barnstable','Berkshire','Bristol','Dukes and Nantucket','Essex','Franklin','Hampden','Hampshire','Middlesex','Norfolk',
+        'Plymouth','Suffolk','Worcester'];
+
+    var countyDataMap = [barnstableData, berksireData, bristolData, dukesAndNantucketData, essexData, franklinData,
+        hampdenData, hampshireData, middlesexData, norfolkData, plymouthData, suffolkData, worcesterData];
+
+    var colorMap = ['#FF0000', '#F46E36', '#04B9FF', '#5DBD32', '#FFC809', '#FB95D5', '#BDA29A', '#6E7074', '#546570', '#C4CCD3',
+        '#37A2DA', '#67E0E3', '#32C5E9', '#9FE6B8', '#FFDB5C', '#FF9F7F', '#FB7293', '#E062AE', '#E690D1', '#E7BCF3', '#9D96F5', '#8378EA', '#8378EA'];
+
+    var seriesData = [];
+
+    for (var i = 0; i < counties.length; i++) {
+        seriesData.push({
+            name: counties[i],
+            type: 'line',
+            symbol: 'circle',
+            data: countyDataMap[i],
+            itemStyle: {
+                color: colorMap[i],
+                borderColor: "#fff",
+                borderWidth: 3,
+                shadowColor: 'rgba(0, 0, 0, .3)',
+                shadowBlur: 0,
+                shadowOffsetY: 2,
+                shadowOffsetX: 2,
+            },
+            areaStyle: {
+                normal: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                        offset: 0,
+                        color: 'rgba(108,80,243,0.3)'
+                    },
+                        {
+                            offset: 1,
+                            color: 'rgba(108,80,243,0)'
+                        }
+                    ], false),
+                    shadowColor: colorMap[i],
+                    shadowBlur: 20
+                }
+            },
+            symbolSize: 5,
+            lineStyle: {
+                normal: {
+                    color: colorMap[i],
+                    shadowColor: 'rgba(0, 0, 0, .3)',
+                    shadowBlur: 0,
+                    shadowOffsetY: 5,
+                    shadowOffsetX: 5,
+                },
+            }
+        });
+    }
+
+    var params = {
+        origin: '*',
+        action: 'parse',
+        page: '2020_coronavirus_pandemic_in_Massachusetts#cite_note-MDPH-Cases-1',
+        prop: 'text',
+        format: 'json'
+    };
+
+    $.getJSON('https://en.wikipedia.org/w/api.php', params).then(response => {
+        var tables = $(response.parse.text['*']).find('table');
+
+        var casesByCountyTable = tables[6];
+        //console.log("total: " + casesByCountyTable.rows.length);
+        for (var i=2; i<casesByCountyTable.rows.length-2; i++) {
+            var currentRow = casesByCountyTable.rows[i];
+            //console.log("row[" + i + "]");
+            for (var j=0; j<currentRow.cells.length; j++) {
+                var currentCell = currentRow.cells[j];
+                var date,barnstable,berkshire,bristol,dukesAndNantucket,essex,franklin,hampden,hampshire,
+                    middlesex,norfolk,plymouth,suffolk,worcester;
+                xAxisData.push(currentRow.cells[0].innerText);
+                barnstableData.push(currentRow.cells[1].innerText);
+                berksireData.push(currentRow.cells[2].innerText);
+                bristolData.push(currentRow.cells[3].innerText);
+                dukesAndNantucketData.push(currentRow.cells[4].innerText);
+                essexData.push(currentRow.cells[5].innerText);
+                franklinData.push(currentRow.cells[6].innerText);
+                hampdenData.push(currentRow.cells[7].innerText);
+                hampshireData.push(currentRow.cells[8].innerText);
+                middlesexData.push(currentRow.cells[9].innerText);
+                norfolkData.push(currentRow.cells[10].innerText);
+                plymouthData.push(currentRow.cells[11].innerText);
+                suffolkData.push(currentRow.cells[12].innerText);
+                worcesterData.push(currentRow.cells[13].innerText);
+            }
+        }
+
+        option = {
+            backgroundColor: getColorFromQueryParam(),
+            title: {
+                show: false,
+                text: 'TITLE'
+            },
+            legend: {
+                data: counties,
+                align: 'left'
+            },
+            tooltip: {},
+            xAxis: {
+                data: xAxisData,
+                silent: false,
+                splitLine: {
+                    show: false
+                }
+            },
+            yAxis: {
+            },
+            series: seriesData,
+            animationEasing: 'elasticOut',
+            animationDelayUpdate: function (idx) {
+                return idx * 5;
+            }
+        };
+
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+
+        });
+
+        $(window).on('resize', function () {
+            if (myChart != null && myChart != undefined) {
+                myChart.resize();
+            }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#FFFFFF";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
+</script>
+</body>
+</html>
