@@ -30,8 +30,10 @@
         seriesData.push({
             name: counties[i],
             type: 'line',
-            symbol: 'circle',
+            stack: 'ma',
+            areaStyle: {},
             data: countyDataMap[i],
+            symbol: 'circle',
             itemStyle: {
                 color: colorMap[i],
                 borderColor: "#fff",
@@ -116,7 +118,21 @@
                 data: counties,
                 align: 'left'
             },
-            tooltip: {},
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#6a7985'
+                    }
+                }
+            },
             xAxis: {
                 data: xAxisData,
                 silent: false,
