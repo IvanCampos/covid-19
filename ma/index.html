@@ -1,178 +1,148 @@
-<!DOCTYPE html>
-<html style="height: 100%">
+<!doctype html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>COVID-19 DASHBOARD</title>
+    <style>
+        iframe {
+            border: none;
+            border-width: 0px;
+        }
+        .toggle {
+            z-index: 999;
+            background-color: #030303;
+        }
+    </style>
 </head>
-<body style="height: 100%; margin: 0">
-<div id="container" style="height: 100%"></div>
-<script type="text/javascript" src="../dist/vendors/echarts/echarts.min.js"></script>
-<script type="text/javascript" src="../dist/vendors/jquery/jquery-3.1.1.min.js"></script>
-<script type="text/javascript">
-    var dom = document.getElementById("container");
-    var myChart = echarts.init(dom);
-    var option = null;
+<body style="background-color: black; border: none;">
 
-    var xAxisData = [], barnstableData = [], berksireData = [], bristolData = [], dukesAndNantucketData = [], essexData = [], franklinData = [],
-        hampdenData = [], hampshireData = [], middlesexData = [], norfolkData = [], plymouthData = [], suffolkData = [], worcesterData = [];
+<div class="container-fluid">
+    <div class="row">
+        <iframe id="header2" class="col-lg-12" style="height:5vh;padding-bottom: 1px;" src="../text/header-title.html"></iframe>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div id="toggle1" class="toggle">
+                <iframe id="frame1" class="col-lg-12" style="height:30vh;" src="../chart/globe-height-deaths.html?=" allowfullscreen></iframe>
+            </div>
+            <div id="toggle2" class="toggle">
+                <iframe id="frame2" class="col-lg-12" style="height:65vh;" src="../chart/line-stacked-massachusetts.html?=" allowfullscreen></iframe>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div id="toggle3" class="toggle">
+                <iframe id="frame3" class="col-lg-12" style="height:30vh;" src="../chart/map-epicenter-massachusetts.html?=" allowfullscreen></iframe>
+            </div>
+            <div id="toggle4" class="toggle">
+                <iframe id="frame4" class="col-lg-12" style="height:65vh;" src="../chart/horizontal-bars-colored-domestic.html?=" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <iframe id="footer1" class="col-lg-12 col-md-12 col-sm-12" style="height:5vh;" src="text/footer-time.html"></iframe>
+    </div>
+</div>
 
-    var counties = ['Barnstable','Berkshire','Bristol','Dukes and Nantucket','Essex','Franklin','Hampden','Hampshire','Middlesex','Norfolk',
-        'Plymouth','Suffolk','Worcester'];
-
-    var countyDataMap = [barnstableData, berksireData, bristolData, dukesAndNantucketData, essexData, franklinData,
-        hampdenData, hampshireData, middlesexData, norfolkData, plymouthData, suffolkData, worcesterData];
-
-    var colorMap = ['#FF0000', '#F46E36', '#04B9FF', '#5DBD32', '#FFC809', '#FB95D5', '#BDA29A', '#6E7074', '#546570', '#C4CCD3',
-        '#37A2DA', '#67E0E3', '#32C5E9', '#9FE6B8', '#FFDB5C', '#FF9F7F', '#FB7293', '#E062AE', '#E690D1', '#E7BCF3', '#9D96F5', '#8378EA', '#8378EA'];
-
-    var seriesData = [];
-
-    for (var i = 0; i < counties.length; i++) {
-        seriesData.push({
-            name: counties[i],
-            type: 'line',
-            stack: 'ma',
-            areaStyle: {},
-            data: countyDataMap[i],
-            symbol: 'circle',
-            itemStyle: {
-                color: colorMap[i],
-                borderColor: "#fff",
-                borderWidth: 3,
-                shadowColor: 'rgba(0, 0, 0, .3)',
-                shadowBlur: 0,
-                shadowOffsetY: 2,
-                shadowOffsetX: 2,
-            },
-            areaStyle: {
-                normal: {
-                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                        offset: 0,
-                        color: 'rgba(108,80,243,0.3)'
-                    },
-                        {
-                            offset: 1,
-                            color: 'rgba(108,80,243,0)'
-                        }
-                    ], false),
-                    shadowColor: colorMap[i],
-                    shadowBlur: 20
-                }
-            },
-            symbolSize: 5,
-            lineStyle: {
-                normal: {
-                    color: colorMap[i],
-                    shadowColor: 'rgba(0, 0, 0, .3)',
-                    shadowBlur: 0,
-                    shadowOffsetY: 5,
-                    shadowOffsetX: 5,
-                },
-            }
-        });
-    }
-
-    var params = {
-        origin: '*',
-        action: 'parse',
-        page: '2020_coronavirus_pandemic_in_Massachusetts#cite_note-MDPH-Cases-1',
-        prop: 'text',
-        format: 'json'
-    };
-
-    $.getJSON('https://en.wikipedia.org/w/api.php', params).then(response => {
-        var tables = $(response.parse.text['*']).find('table');
-
-        var casesByCountyTable = tables[6];
-        //console.log("total: " + casesByCountyTable.rows.length);
-        for (var i=2; i<casesByCountyTable.rows.length-2; i++) {
-            var currentRow = casesByCountyTable.rows[i];
-            //console.log("row[" + i + "]");
-            for (var j=0; j<currentRow.cells.length; j++) {
-                var currentCell = currentRow.cells[j];
-                var date,barnstable,berkshire,bristol,dukesAndNantucket,essex,franklin,hampden,hampshire,
-                    middlesex,norfolk,plymouth,suffolk,worcester;
-                xAxisData.push(currentRow.cells[0].innerText);
-                barnstableData.push(currentRow.cells[1].innerText);
-                berksireData.push(currentRow.cells[2].innerText);
-                bristolData.push(currentRow.cells[3].innerText);
-                dukesAndNantucketData.push(currentRow.cells[4].innerText);
-                essexData.push(currentRow.cells[5].innerText);
-                franklinData.push(currentRow.cells[6].innerText);
-                hampdenData.push(currentRow.cells[7].innerText);
-                hampshireData.push(currentRow.cells[8].innerText);
-                middlesexData.push(currentRow.cells[9].innerText);
-                norfolkData.push(currentRow.cells[10].innerText);
-                plymouthData.push(currentRow.cells[11].innerText);
-                suffolkData.push(currentRow.cells[12].innerText);
-                worcesterData.push(currentRow.cells[13].innerText);
-            }
-        }
-
-        option = {
-            backgroundColor: getColorFromQueryParam(),
-            title: {
-                show: false,
-                text: 'TITLE'
-            },
-            legend: {
-                data: counties,
-                align: 'left'
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'cross',
-                    label: {
-                        backgroundColor: '#6a7985'
-                    }
-                }
-            },
-            xAxis: {
-                data: xAxisData,
-                silent: false,
-                splitLine: {
-                    show: false
-                }
-            },
-            yAxis: {
-            },
-            series: seriesData,
-            animationEasing: 'elasticOut',
-            animationDelayUpdate: function (idx) {
-                return idx * 5;
-            }
-        };
-
-        if (option && typeof option === "object") {
-            myChart.setOption(option, true);
-        }
-
-        });
-
-        $(window).on('resize', function () {
-            if (myChart != null && myChart != undefined) {
-                myChart.resize();
-            }
-    });
-
+<script>
+    getColorFromQueryParam();
     function getColorFromQueryParam() {
-        var color = "#FFFFFF";
+        var color = "000000";
         if (!window.location.search) return color;
 
         let params = new URLSearchParams(window.location.search);
 
         for (let p of params) {
-            color = "#" + p[1];
+            color = p[1];
         }
+        $("#frame1").attr('src' , $("#frame1").attr('src') + color);
+        $("#frame2").attr('src' , $("#frame2").attr('src') + color);
+        $("#frame3").attr('src' , $("#frame3").attr('src') + color);
+        $("#frame4").attr('src' , $("#frame4").attr('src') + color);
+        /*$("#frame5").attr('src' , $("#frame5").attr('src') + color);
+        $("#frame6").attr('src' , $("#frame6").attr('src') + color);
+        $("#frame7").attr('src' , $("#frame7").attr('src') + color);
+        $("#frame8").attr('src' , $("#frame8").attr('src') + color);
+        $("#frame9").attr('src' , $("#frame9").attr('src') + color);*/
+    }
+    if (document.fullscreenEnabled) {
+        document.getElementById("toggle1").addEventListener("click", function (event) {
+            if (!document.fullscreenElement) {
+                document.getElementById("frame1").requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
 
-        return color;
+        }, false);
+        document.getElementById("toggle2").addEventListener("click", function (event) {
+            if (!document.fullscreenElement) {
+                document.getElementById("frame2").requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+
+        }, false);
+        document.getElementById("toggle3").addEventListener("click", function (event) {
+            if (!document.fullscreenElement) {
+                document.getElementById("frame3").requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+
+        }, false);
+        document.getElementById("toggle4").addEventListener("click", function (event) {
+            if (!document.fullscreenElement) {
+                document.getElementById("frame4").requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+
+        }, false);
+        /*document.getElementById("toggle5").addEventListener("click", function (event) {
+            if (!document.fullscreenElement) {
+                document.getElementById("frame5").requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+
+        }, false);
+        document.getElementById("toggle6").addEventListener("click", function (event) {
+            if (!document.fullscreenElement) {
+                document.getElementById("frame6").requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+
+        }, false);
+        document.getElementById("toggle7").addEventListener("click", function (event) {
+            if (!document.fullscreenElement) {
+                document.getElementById("frame7").requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+
+        }, false);
+        document.getElementById("toggle8").addEventListener("click", function (event) {
+            if (!document.fullscreenElement) {
+                document.getElementById("frame8").requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+
+        }, false);
+        document.getElementById("toggle9").addEventListener("click", function (event) {
+            if (!document.fullscreenElement) {
+                document.getElementById("frame9").requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+
+        }, false);*/
     }
 </script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>
