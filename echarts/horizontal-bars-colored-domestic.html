@@ -21,6 +21,7 @@
 		var confirmed;
 		var deaths;
 		var combinedKey;
+		var ratio;
 
 		var top25 = api.sort(function(a, b) { return a.confirmed < b.confirmed ? 1 : -1; }).slice(0, 25);
 
@@ -28,7 +29,8 @@
 			confirmed = top25[i].confirmed;
 			deaths = top25[i].deaths;
 			combinedKey = top25[i].combinedKey;
-			sourceData.push([deaths, confirmed, combinedKey]);
+			ratio = (deaths/confirmed)*100;
+			sourceData.push([deaths, confirmed, combinedKey, ratio]);
 		}
 
 		var option = {
@@ -39,7 +41,7 @@
 					var deaths = params.value[0];
 					var confirmed = params.value[1];
 					var location = params.value[2];
-					var ratio = (deaths/confirmed)*100;
+					var ratio = params.value[3];
 					return location + '<br/>deaths: ' + deaths + '<br/>confirmed: ' + confirmed + '<br>ratio: ' + ratio.toFixed(2) + '%';
 				}
 			},
@@ -54,12 +56,12 @@
 				orient: 'horizontal',
 				left: 'center',
 				min: 10,
-				max: 100,
-				text: ['High Score', 'Low Score'],
+				max: 10000,
+				text: ['High', 'Low'],
 				// Map the score column to color
 				dimension: 0,
 				inRange: {
-					color: ['#D7DA8B', '#E15457']
+					color: ['#ff3b3b', '#580000']
 				}
 			},
 			series: [
