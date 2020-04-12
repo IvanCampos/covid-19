@@ -33,13 +33,25 @@
     $.getJSON('https://en.wikipedia.org/w/api.php', params).then(response => {
         var tables = $(response.parse.text['*']).find('table');
 
+        var totalCasesTable;
+        var casesByCountyTable;
+
         for (var i=0; i < tables.length; i++) {
-            console.log("Tables: [" + i + "]: " + JSON.stringify(tables[i].rows[0].innerText));
+            var currentRowText = tables[i].rows[0].innerText;
+            console.log("Tables: [" + i + "]: " + JSON.stringify(currentRowText));
+            if (currentRowText == '\nCoronavirus disease 2019 (COVID-19) cases in Massachusetts[1]\n') {
+                totalCasesTable = tables[i];
+            } else if (currentRowText == '\nMassachusetts COVID-19 cases (cumulative) by county[1]\n') {
+                casesByCountyTable = tables[i];
+            }
         }
+
+        //\nMassachusetts COVID-19 cases (cumulative) by county[1]\n
+        //\nCoronavirus disease 2019 (COVID-19) cases in Massachusetts[1]\n
 
         var confirmedData = [], testData = [], hospitalizationData = [], deathData = [];
 
-        var totalCasesTable = tables[4];
+        //var totalCasesTable = tables[2];
         console.log("total: " + totalCasesTable.rows.length);
         for (var i=12; i<totalCasesTable.rows.length-2; i++) {
             var currentRow = totalCasesTable.rows[i];
@@ -57,7 +69,7 @@
 
         $('body').append('<hr/>');
 
-        var casesByCountyTable = tables[5];
+        //var casesByCountyTable = tables[3];
         //console.log("total: " + casesByCountyTable.rows.length);
         for (var i=2; i<casesByCountyTable.rows.length-2; i++) {
             var currentRow = casesByCountyTable.rows[i];

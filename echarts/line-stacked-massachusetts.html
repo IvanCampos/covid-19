@@ -82,7 +82,15 @@
     $.getJSON('https://en.wikipedia.org/w/api.php', params).then(response => {
         var tables = $(response.parse.text['*']).find('table');
 
-        var casesByCountyTable = tables[5];
+        var casesByCountyTable;
+
+        for (var i=0; i < tables.length; i++) {
+            var currentRowText = tables[i].rows[0].innerText;
+            if (currentRowText == '\nMassachusetts COVID-19 cases (cumulative) by county[1]\n') {
+                casesByCountyTable = tables[i];
+            }
+        }
+
         //console.log("total: " + casesByCountyTable.rows.length);
         for (var i=2; i<casesByCountyTable.rows.length-2; i++) {
             var currentRow = casesByCountyTable.rows[i];
