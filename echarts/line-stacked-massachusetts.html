@@ -74,7 +74,7 @@
     var params = {
         origin: '*',
         action: 'parse',
-        page: '2020_coronavirus_pandemic_in_Massachusetts#cite_note-MDPH-Cases-1',
+        page: '2020_coronavirus_pandemic_in_Massachusetts',
         prop: 'text',
         format: 'json'
     };
@@ -82,7 +82,7 @@
     $.getJSON('https://en.wikipedia.org/w/api.php', params).then(response => {
         var tables = $(response.parse.text['*']).find('table');
 
-        var casesByCountyTable = tables[6];
+        var casesByCountyTable = tables[5];
         //console.log("total: " + casesByCountyTable.rows.length);
         for (var i=2; i<casesByCountyTable.rows.length-2; i++) {
             var currentRow = casesByCountyTable.rows[i];

@@ -25,7 +25,7 @@
     var params = {
         origin: '*',
         action: 'parse',
-        page: '2020_coronavirus_pandemic_in_Massachusetts#cite_note-MDPH-Cases-1',
+        page: '2020_coronavirus_pandemic_in_Massachusetts',
         prop: 'text',
         format: 'json'
     };
@@ -33,9 +33,13 @@
     $.getJSON('https://en.wikipedia.org/w/api.php', params).then(response => {
         var tables = $(response.parse.text['*']).find('table');
 
+        for (var i=0; i < tables.length; i++) {
+            console.log("Tables: [" + i + "]: " + JSON.stringify(tables[i].rows[0].innerText));
+        }
+
         var confirmedData = [], testData = [], hospitalizationData = [], deathData = [];
 
-        var totalCasesTable = tables[5];
+        var totalCasesTable = tables[4];
         console.log("total: " + totalCasesTable.rows.length);
         for (var i=12; i<totalCasesTable.rows.length-2; i++) {
             var currentRow = totalCasesTable.rows[i];
@@ -46,14 +50,14 @@
                 confirmedData.push(currentRow.cells[1].innerText);
                 testData.push(currentRow.cells[10].innerText);
                 hospitalizationData.push(currentRow.cells[13].innerText);
-                deathData.push(currentRow.cells[16].innerText);
+                //deathData.push(currentRow.cells[16].innerText);
             }
         }
         $('body').append(totalCasesTable);
 
-        //$('body').append('<hr/>');
+        $('body').append('<hr/>');
 
-        /*var casesByCountyTable = tables[6];
+        var casesByCountyTable = tables[5];
         //console.log("total: " + casesByCountyTable.rows.length);
         for (var i=2; i<casesByCountyTable.rows.length-2; i++) {
             var currentRow = casesByCountyTable.rows[i];
@@ -122,7 +126,7 @@
                 //console.log("cell{" + j + "]: " + currentCell.innerText);
             }
         }
-        $('body').append(casesByCountyTable);*/
+        $('body').append(casesByCountyTable);
     });
 
     function numberWithCommas(x) {
