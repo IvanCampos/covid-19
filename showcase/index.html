@@ -1,0 +1,92 @@
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script defer src="theme.js"></script>
+  <link rel="stylesheet" href="style.css" />
+  <link
+    href="https://fonts.googleapis.com/css?family=Orbitron:300,400,700&display=swap"
+    rel="stylesheet"
+  />
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+</head>
+
+<body>
+  <nav class="navbar">
+    <ul class="navbar-nav">
+      <li class="logo">
+        <a href="javascript:setContent('../index.html')" class="nav-link">
+          <i class="fas fa-head-side-mask fa-2x"></i>
+          <span class="link-text logo-text">COVID</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="javascript:setContent('../echarts/globe-dots-confirmed.html')" class="nav-link">
+          <i class="fas fa-globe-americas fa-2x"></i>
+          <span class="link-text">Globes</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="javascript:setContent('../mapbox/buildings-boston.html')" class="nav-link">
+          <i class="far fa-map fa-2x"></i>
+          <span class="link-text">Maps</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="javascript:setContent('../echarts/horizontal-bars-colored-domestic.html')" class="nav-link">
+          <i class="fas fa-chart-bar fa-2x"></i>
+          <span class="link-text">Charts</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="javascript:setContent('../echarts/globe-height-deaths.html')" class="nav-link">
+          <i class="fas fa-skull-crossbones fa-2x"></i>
+          <span class="link-text">Deaths</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="javascript:setContent('../echarts/map-deaths-international.html')" class="nav-link">
+          <i class="fas fa-walking fa-2x"></i>
+          <span class="link-text">Recovered</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-head-side-cough fa-2x"></i>
+          <span class="link-text">Confirmed</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="javascript:setContent('../echarts/map-epicenter-massachusetts.html')" class="nav-link">
+          <i class="fas fa-location-arrow fa-2x"></i>
+          <span class="link-text">Massachusetts</span>
+        </a>
+      </li>
+
+      <li class="nav-item" id="themeButton">
+        <a href="javascript:window.open('https://github.com/IvanCampos/covid-19/')" class="nav-link">
+          <i class="fab fa-github fa-2x"></i>
+          <span class="link-text">Github</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <main>
+    <div id="content">
+      <iframe src="../index.html" style="height: 100%; width: 100%; border: 0;"></iframe>
+    </div>
+  </main>
+
+  <script>
+    function setContent(link) {
+      document.getElementById("content").innerHTML = "<iframe src='" + link + "' style='height: 100%; width: 100%; border: 0;'></iframe>";
+    }
+  </script>
+
+</body>
