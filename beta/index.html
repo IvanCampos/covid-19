@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+<head>
+    <meta charset="UTF-8">
+    <title>COVID-19 DASHBOARD</title>
+    <style>
+        .container{
+            display: flex;
+            height: 50%;
+        }
+        .fixed{
+            width: 33%;
+        }
+        .flex-item{
+            flex-grow: 1;
+        }
+    </style>
+</head>
+<body style="height: 100%; margin: 0">
+
+<div class="container">
+    <div id="container-globe-blue" class="fixed"></div>
+    <div id="container-globe-red"  class="fixed"></div>
+    <div id="container-globe-green"  class="flex-item"></div>
+</div>
+
+<script type="text/javascript" src="../dist/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="../dist/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="../dist/vendors/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="../dist/vendors/d3/d3-contour.js"></script>
+<script type="text/javascript" src="../dist/vendors/d3/d3-timer.js"></script>
+<script type="text/javascript" src="../dist/vendors/d3/d3-geo.js"></script>
+<script type="text/javascript">
+    var domBlue = document.getElementById("container-globe-blue");
+    var myChartBlue = echarts.init(domBlue);
+
+    var domRed = document.getElementById("container-globe-red");
+    var myChartRed = echarts.init(domRed);
+
+    var domGreen = document.getElementById("container-globe-green");
+    var myChartGreen = echarts.init(domGreen);
+
+    var optionBlue = null;
+    var optionRed = null;
+    var optionGreen = null;
+
+
+    /* BEGIN BLUE */
+    var baseImg = "../asset/get/s/data-1571295640429-3Co5rpLX.png";
+    var scanImg = "../asset/get/s/data-1571295559348-whnsd6fi.jpg";
+
+    var config = {
+        lineWidth: 0.5,
+        color: '#00FFC2',
+        levels: 1,
+        intensity: 1,
+        threshold: 0.01
+    }
+
+    var canvasBlue = document.createElement('canvas');
+    canvasBlue.width = 4096;
+    canvasBlue.height = 2048;
+    contextBlue = canvasBlue.getContext("2d");
+
+    contextBlue.lineWidth = config.lineWidth;
+    contextBlue.strokeStyle = config.color;
+    contextBlue.fillStyle = config.color;
+    contextBlue.shadowColor = config.color;
+
+    image(scanImg).then(function(image) {
+        var m = image.height,
+            n = image.width,
+            values = new Array(n * m),
+            contours = d3.contours().size([n, m]).smooth(true),
+            projection = d3.geoIdentity().scale(canvasBlue.width / n),
+            path = d3.geoPath(projection, contextBlue);
+
+        for (var j = 0, k = 0; j < m; ++j) {
+            for (var i = 0; i < n; ++i, ++k) {
+                values[k] = image.data[(k << 2)] / 255;
+            }
+        }
+
+        var opt = {
+            image: canvasBlue
+        }
+
+        var results = [];
+
+        function update(threshold, levels) {
+            contextBlue.clearRect(0, 0, canvasBlue.width, canvasBlue.height);
+            var thresholds = [];
+            for (var i = 0; i < levels; i++) {
+                thresholds.push((threshold + 1 / levels * i) % 1);
+            }
+            results = contours.thresholds(thresholds)(values);
+            redraw();
+        }
+
+        function redraw() {
+            results.forEach(function(d, idx) {
+                contextBlue.beginPath();
+                path(d);
+                contextBlue.globalAlpha = 1;
+                contextBlue.stroke();
+                if (idx > config.levels / 5 * 3) {
+                    contextBlue.globalAlpha = 0.01;
+                    contextBlue.fill();
+                }
+            });
+            opt.onupdate();
+        }
+        d3.timer(function(t) {
+            var threshold = (t % 10000) / 10000;
+            update(threshold, 1);
+        });
+
+        initChartsBlue(opt);
+
+        update(config.threshold, config.levels);
+
+    });
+
+    function image(url) {
+        return new Promise(function(resolve) {
+            var image = new Image();
+            image.src = url;
+            image.onload = function() {
+                var canvas = document.createElement("canvas");
+                canvas.width = image.width / 8;
+                canvas.height = image.height / 8;
+                var context = canvas.getContext("2d");
+                context.drawImage(image, 0, 0, canvas.width, canvas.height);
+                resolve(context.getImageData(0, 0, canvas.width, canvas.height));
+            };
+        });
+    }
+
+    function initChartsBlue(opt) {
+        var contourChart = echarts.init(document.createElement('canvas'), null, {
+            width: 4096,
+            height: 2048
+        });
+
+        var img = new echarts.graphic.Image({
+            style: {
+                image: opt.image,
+                x: -1,
+                y: -1,
+                width: opt.image.width + 2,
+                height: opt.image.height + 2
+            }
+        });
+        contourChart.getZr().add(img);
+
+        opt.onupdate = function() {
+            img.dirty();
+        };
+
+        var dataBlue = [];
+
+        myChartBlue.setOption({
+            backgroundColor: '#000',
+            globe: {
+                baseTexture: baseImg,
+                displacementScale: 0.05,
+                displacementQuality: 'high',
+                shading: 'realistic',
+                realisticMaterial: {
+                    roughness: 0.2,
+                    metalness: 0
+                },
+
+                postEffect: {
+                    enable: true,
+                    depthOfField: {
+                        //enable: true
+                    }
+                },
+                light: {
+                    ambient: {
+                        intensity: 1
+                    },
+                    main: {
+                        intensity: 0,
+                        shadow: true
+                    },
+                },
+                viewControl: {
+                    center: [0, 0, 0],
+                    alpha: 30,
+                    beta: 160,
+                    autoRotate: true,
+                    autoRotateAfterStill: 4,
+                    distance: 175,
+                    autoRotateSpeed: 4
+                },
+                layers: [{
+                    type: 'blend',
+                    blendTo: 'emission',
+                    texture: contourChart,
+                    intensity: config.intensity
+                }]
+            },
+            series: [{
+                type: 'scatter3D',
+                blendMode: 'lighter',
+                coordinateSystem: 'globe',
+                showEffectOn: 'render',
+                zlevel: 2,
+                effectType: 'ripple',
+                symbolSize: 20,
+                rippleEffect: {
+                    period: 4,
+                    scale: 4,
+                    brushType: 'fill'
+                },
+                hoverAnimation: true,
+                itemStyle: {
+                    normal: {
+                        color: 'rgba(255, 0, 0, 0.9)'
+                    }
+                },
+                data: dataBlue
+            }]
+        });
+    }
+    /* END BLUE */
+
+    /* BEGIN RED */
+    let canvasRed = document.createElement('canvas');
+    let mapChartRed = echarts.init(canvasRed, null, {
+        width: 4096,
+        height: 2048
+    });
+
+    var dataRed = {};
+
+    optionRed = {
+        backgroundColor: '#000000',
+        visualMap: {
+            show: false,
+            min: 0,
+            max: 60,
+            type: 'continuous',
+            seriesIndex: 0,
+            inRange: {
+                symbolSize: [1.0, 10.0]
+            }
+        },
+        globe: {
+            baseTexture: "../asset/get/s/data-1565167424629-_VRUzTZn2.jpg",
+            heightTexture: '../asset/get/s/data-1491889019097-rJQYikcpl.jpg',
+            displacementScale: 0.04,
+            displacementQuality: 'high',
+            globeOuterRadius: 120,
+            baseColor: '#8B0000',
+            shading: 'realistic',
+            realisticMaterial: {
+                roughness: 0.9
+            },
+            postEffect: {
+                enable: true
+            },
+            temporalSuperSampling: {
+                enable: true
+            },
+            light: {
+                main: {
+                    color: '#fff',
+                    intensity: 1.2,
+                    shadow: false
+                }
+            },
+            viewControl: {
+                projection: 'perspective',
+                alpha: 90,
+                beta: 0,
+                center: [0, 0, 0],
+                targetCoord: [120, 38],
+                autoRotate: true,
+                autoRotateAfterStill: 4,
+                distance: 200,
+                autoRotateSpeed: 4
+            },
+            layers: [{
+                type: 'blend',
+                texture: mapChartRed
+            }]
+        },
+        series: {
+            type: 'scatter3D',
+            coordinateSystem: 'globe',
+            blendMode: 'lighter',
+            symbolSize: 2,
+            itemStyle: {
+                color: 'rgb(255,0,0)',
+                opacity: 1
+            },
+            data: dataRed
+        }
+    }
+
+    myChartRed.setOption(optionRed);
+    /* END RED */
+
+    /* BEGIN GREEN */
+
+    var dataGreen = {};
+
+    let canvasGreen = document.createElement('canvas');
+    let mapChartGreen = echarts.init(canvasGreen, null, {
+        width: 4096,
+        height: 2048
+    });
+
+    optionGreen = {
+        backgroundColor: '#000000',
+        visualMap: {
+            show: false,
+            min: 0,
+            max: 60,
+            type: 'continuous',
+            seriesIndex: 0,
+            inRange: {
+                symbolSize: [1.0, 10.0]
+            }
+        },
+        globe: {
+            baseTexture: "../asset/get/s/data-1565167424629-_VRUzTZn2.jpg",
+            heightTexture: '../asset/get/s/data-1491889019097-rJQYikcpl.jpg',
+            displacementScale: 0.04,
+            displacementQuality: 'high',
+            globeOuterRadius: 120,
+            shading: 'realistic',
+            realisticMaterial: {
+                roughness: 0.9
+            },
+            postEffect: {
+                enable: true
+            },
+            temporalSuperSampling: {
+                enable: true
+            },
+            light: {
+                main: {
+                    color: '#fff',
+                    intensity: 1.2,
+                    shadow: false
+                }
+            },
+            viewControl: {
+                projection: 'perspective',
+                alpha: 90,
+                beta: 0,
+                center: [0, 0, 0],
+                targetCoord: [120, 38],
+                autoRotate: true,
+                autoRotateAfterStill: 4,
+                distance: 200,
+                autoRotateSpeed: 4
+            },
+            layers: [{
+                type: 'blend',
+                texture: mapChartGreen
+            }]
+        },
+        series: {
+            type: 'scatter3D',
+            coordinateSystem: 'globe',
+            blendMode: 'lighter',
+            symbolSize: 2,
+            itemStyle: {
+                color: 'rgb(0,255,0)',
+                opacity: 1
+            },
+            data: dataGreen
+        }
+    }
+
+    myChartGreen.setOption(optionGreen);
+
+    /* END GREEN */
+
+
+    if (optionBlue && typeof optionBlue === "object") {
+        myChartBlue.setOption(optionBlue, true);
+    }
+    if (optionRed && typeof optionRed === "object") {
+        myChartRed.setOption(optionRed, true);
+    }
+    if (optionGreen && typeof optionGreen === "object") {
+        myChartGreen.setOption(optionGreen, true);
+    }
+
+    $(window).on('resize', function () {
+        if (myChartBlue != null && myChartBlue != undefined) {
+            myChartBlue.resize();
+        }
+        if (myChartRed != null && myChartRed != undefined) {
+            myChartRed.resize();
+        }
+        if (myChartGreen != null && myChartGreen != undefined) {
+            myChartGreen.resize();
+        }
+    });
+
+    function getColorFromQueryParam() {
+        var color = "#000";
+        if (!window.location.search) return color;
+
+        let params = new URLSearchParams(window.location.search);
+
+        for (let p of params) {
+            color = "#" + p[1];
+        }
+
+        return color;
+    }
+</script>
+</body>
+</html>

@@ -12,6 +12,7 @@ Built on the shoulders of these giants:
 * Covid-19 API deployed to: https://zeit.co/
 * Covid-19 Data: https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series
 * Massachusetts Data: https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Massachusetts#cite_note-MDPH-Cases-1
+* Mapbox GL: https://docs.mapbox.com/mapbox-gl-js/
 * Running on https://pages.github.com/
 * JQuery: https://jquery.com/
 * Bootstrap Responsive Layout: https://getbootstrap.com/ 
