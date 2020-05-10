@@ -44,6 +44,7 @@
 
 		//var uploadedDataURL = "https://cdn.rawgit.com/dakoop/e3d0b2100c6b6774554dddb0947f2b67/raw/ea38ad2f7949fb5c2242fa1571c9ea12140f2a76/ma-school-districts-500.geojson";
 		var uploadedDataURL = "https://cdn.jsdelivr.net/gh/ivancampos/covid-19/asset/get/s/Massachusetts_Counties.geojson";
+		//var uploadedDataURL = "../asset/get/s/geojson-mass-outline.json";
 		myChart.showLoading();
 		$.getJSON(uploadedDataURL, function (geoJson) {
 			echarts.registerMap('MA', geoJson);
@@ -141,7 +142,7 @@
 							return b.value - a.value;
 						})),
 						symbolSize: function (val) {
-							return val[2] / 150;
+							return val[2] / 250;
 						},
 						showEffectOn: 'render',
 						rippleEffect: {
