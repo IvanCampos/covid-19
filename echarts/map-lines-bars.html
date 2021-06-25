@@ -159,6 +159,7 @@
 			yAxis: {
 				type: 'category',
 				name: 'TOP 10',
+				zlevel: 99,
 				nameGap: 16,
 				axisLine: {show: false, lineStyle: {color: '#ddd'}},
 				axisTick: {show: false, lineStyle: {color: '#ddd'}},
@@ -172,7 +173,7 @@
 					coordinateSystem: 'geo',
 					data: convertedData[0],
 					symbolSize: function (val) {
-						return val[2]/4000;
+						return val[2]/50000;
 					},
 					label: {
 						normal: {
@@ -196,7 +197,7 @@
 					coordinateSystem: 'geo',
 					data: convertedData[1],
 					symbolSize: function (val) {
-						return val[2]/4000;
+						return val[2]/70000;
 					},
 					showEffectOn: 'emphasis',
 					rippleEffect: {

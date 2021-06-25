@@ -81,7 +81,7 @@
 
     $.getJSON('https://en.wikipedia.org/w/api.php', params).then(response => {
         var tables = $(response.parse.text['*']).find('table');
-
+        //console.log("Tables: " + tables.length);
         var casesByCountyTable;
 
         for (var i=0; i < tables.length; i++) {

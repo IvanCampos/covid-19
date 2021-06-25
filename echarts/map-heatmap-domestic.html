@@ -92,7 +92,7 @@
 			},
 			visualMap: {
 				min: 0,
-				max: 1750,
+				max: 100000,
 				splitNumber: 5,
 				inRange: {
 					color: ['#d94e5d','#eac736','#50a3ba'].reverse()
@@ -140,7 +140,7 @@
 					coordinateSystem: 'geo',
 					data: convertData(data),
 					symbolSize: function (val) {
-						return val[2]/150;
+						return val[2]/20000;
 					},
 					label: {
 						normal: {
